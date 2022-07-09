@@ -1,0 +1,2 @@
+name = gigel
+version = 0.0.1
