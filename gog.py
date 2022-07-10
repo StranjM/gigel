@@ -7,6 +7,7 @@ from discord.ext import tasks
 from discord.ext import commands
 from discord.utils import get
 import random
+import os
 
 intents = discord.Intents.default()
 intents.members = True
@@ -18,9 +19,11 @@ client = commands.Bot(command_prefix="g", intents = intents, help_commands = Non
 async def on_ready():
     print('finished...')
 
+#                                            --ping--
 @client.command()
 async def ping(ctx):
-    await ctx.send('Pong!')
+    embed = discord.Embed(title = f'Pong! Latency: {round(client.latency * 1000)}ms', color=0xe67e22)
+    await ctx.send(embed = embed)
 
 #                                             --kick--
 @client.command()
@@ -119,8 +122,18 @@ async def commands(ctx):
     embed.add_field(name= "Server link", value= 'invlink', inline=False)
     embed.add_field(name= "Number Generator", value= 'ng100, ng1000, ng10000')
     embed.add_field(name= "Pictures", value= "obama, trump", inline=False)
-    embed.set_footer(text= "Also find out ;)")
+    embed.set_footer(text= "New command helpg")
     await ctx.send(embed=embed)
+
+#                                                  --help--
+@client.command()
+async def helpg(ctx):
+    embed=discord.Embed(title="Commands list", color=0xe67e22)
+    embed.add_field(name= "Prefix", value= "g", inline=False)
+    embed.add_field(name= "Commands:", value= "ping, avatar, obama, trump, link", inline=False)
+    embed.add_field(name= "Number Generator", value= "ng100, ng1000, ng10000", inline=False)
+    embed.set_footer(text="This is all for now.")
+    await ctx.send(embed = embed)
 
 #                                                   --IDK--
 #import random
@@ -144,9 +157,11 @@ async def command_name_error(ctx, error):
             em = discord.Embed(title=f"Slow it down bro!",description=f"Try again in {error.retry_after:.2f}s.", color=0xe67e22)
             await ctx.send(embed=em)
 
+#                                                --percentage--
 @client.command()
 async def percentage(ctx):
-    await ctx.send('10%') 
+    embed = discord.Embed(name="gg percentage", title="gg percentage", description=f"10%", color=0xe67e22, inline=False)
+    await ctx.send(embed = embed)
 
 #                                              --num generator-n-- 
 @client.command()
@@ -183,6 +198,19 @@ async def pr2(ctx):
 async def pr(message):
     await message.channel.send(file=discord.File(random.choice('obama-pyramid.gif', 'obama-pyramid.gif', 'obama-pyramid.gif', 'obama-pyramid.gif', 'trump-trumpium-gif')))
 
+#                                                     --avatar--
+@client.command()
+async def avatar(ctx, member : discord.Member = None):
+    if member == None:
+        member = ctx.author
+
+    memberAvatar = member.avatar_url
+
+    embed=discord.Embed(title=f"{member.name}'s avatar", color=0xe67e22) 
+    embed.set_image(url=memberAvatar)
+    embed.set_footer(text = f"requested by {ctx.author.name}")
+
+    await ctx.send(embed=embed)
 
 #from discord import Button
 
@@ -197,4 +225,4 @@ async def pr(message):
 
 
 
-client.run('OTgzODA3MTM0NTQwMTM2NDY4.G-3SKf.k-W22D1_megGlpWVvQJN3i_1gu4rPS5c8spvtE')    
+client.run(os.environ["DISCORD_TOKEN"])    
